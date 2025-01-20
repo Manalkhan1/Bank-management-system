@@ -30,8 +30,7 @@ To design a simple, robust, and user-friendly banking system that provides essen
    - Modular code structure for easy future feature extensions.  
 
 ### **Technologies and Concepts Used:**  
-- **C++ Programming**  
-- Object-Oriented Programming (Classes, Objects, Inheritance)  
+- **C++ Programming**    
 - File Handling for Data Storage  
 - Control Structures (Loops, Conditional Statements)  
 - Exception Handling  
