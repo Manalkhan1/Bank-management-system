@@ -33,6 +33,6 @@ To design a simple, robust, and user-friendly banking system that provides essen
 - **C++ Programming**    
 - File Handling for Data Storage  
 - Control Structures (Loops, Conditional Statements)  
-- Exception Handling  
+- Exception Handling 
 
 
