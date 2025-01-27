@@ -1,4 +1,4 @@
-
+ 
 void addAccount(Account accounts[], int &count, int maxSize) {
     if (count >= maxSize) {
         cout << "Error: Maximum account limit reached." << endl;
