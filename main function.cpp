@@ -1,135 +1,64 @@
-// Main function to start the program
-int main() {
-    Bank bank;
-    int choice;
-    int loggedInAccount = -1;  // -1 means no account logged in
 
-    while (true) {
-        displayInitialMenu();
+int main() {
+    const int MAX_ACCOUNTS = 100;
+    Account accounts[MAX_ACCOUNTS];
+    int accountCount = loadAccountsFromFile(accounts, MAX_ACCOUNTS);
+
+    int choice;
+    do {
+        cout << "\n--- Welcome to Bank Management System ---\n";
+        cout << "1. Login\n2. Create Accounts\n3. Display Accounts\n4. Add Recipient\n5. Display Recipients \n6. Deposit Money \n7. Withdraw Money\ \n8. Make Online Payment\n9. Exit\nEnter your choice: ";
         cin >> choice;
 
-        if (choice == 1) {
-            int accountNumber;
-            string name, pin;
-            double initialDeposit;
-            cout << "Enter account number: ";
-            cin >> accountNumber;
-            cout << "Enter name: ";
-            cin.ignore(); // To clear the newline from the input buffer
-            getline(cin, name);
-            cout << "Enter initial deposit: ";
-            cin >> initialDeposit;
-            cout << "Enter PIN: ";
-            cin >> pin;
-            bank.addAccount(accountNumber, name, initialDeposit, pin);
-        } else if (choice == 2) {
-            bool loginSuccess = login(loggedInAccount, bank);
-            if (!loginSuccess) continue;
-        } else {
-            cout << "Invalid choice.\n";
-            continue;
-        }
-
-        while (loggedInAccount != -1) {
-            displayBankMenu();
-            cin >> choice;
-
+        try {
             switch (choice) {
-                case 1: {
-                    // New User (Create Account)
-                    int accountNumber;
-                    string name, pin;
-                    double initialDeposit;
-                    cout << "Enter account number: ";
-                    cin >> accountNumber;
-                    cout << "Enter name: ";
-                    cin.ignore(); // To clear the newline from the input buffer
-                    getline(cin, name);
-                    cout << "Enter initial deposit: ";
-                    cin >> initialDeposit;
-                    cout << "Enter PIN: ";
-                    cin >> pin;
-                    bank.addAccount(accountNumber, name, initialDeposit, pin);
+            	case 1: {
+                    int loggedInIndex;
+                    if (login(accounts, accountCount, loggedInIndex)) {
+                        cout << "You are now logged in!\n";
+                    }
                     break;
-                }
                 case 2:
-                    // Display all accounts
-                    bank.displayAccounts();
+                    addAccount(accounts, accountCount, MAX_ACCOUNTS);
                     break;
                 case 3:
-                    // Display all recipients
-                    bank.displayRecipients();
+                    displayAccounts(accounts, accountCount);
                     break;
                 case 4: {
-                    // Add a recipient
-                    int recipientNumber;
-                    string recipientName;
+                    int recipientAccount;
+                    char recipientName[50];
                     cout << "Enter recipient account number: ";
-                    cin >> recipientNumber;
+                    cin >> recipientAccount;
                     cout << "Enter recipient name: ";
-                    cin.ignore(); // To clear the newline from the input buffer
-                    getline(cin, recipientName);
-                    bank.addRecipient(recipientNumber, recipientName);
+                    cin.ignore();
+                    cin.getline(recipientName, 50);
+                    addRecipient(recipientAccount, recipientName);
                     break;
                 }
-                case 5: {
-                    // Deposit Money
-                    int accountNumber;
-                    double amount;
-                    cout << "Enter account number: ";
-                    cin >> accountNumber;
-                    cout << "Enter amount to deposit: ";
-                    cin >> amount;
-                    bank.deposit(accountNumber, amount);
+                case 5:
+                    displayRecipients();
                     break;
-                }
-                case 6: {
-                    // Withdraw Money
-                    int accountNumber;
-                    double amount;
-                    string pin;
-                    cout << "Enter account number: ";
-                    cin >> accountNumber;
-                    cout << "Enter amount to withdraw: ";
-                    cin >> amount;
-                    cout << "Enter PIN: ";
-                    cin >> pin;
-                    bank.withdraw(accountNumber, amount, pin);
+                case 6:
+                    deposit(accounts, accountCount);
                     break;
-                }
-                case 7: {
-                    // Make Online Payment
-                    int recipientNumber;
-                    double amount;
-                    cout << "Enter recipient account number: ";
-                    cin >> recipientNumber;
-                    cout << "Enter amount to pay: ";
-                    cin >> amount;
-                    bank.makeOnlinePayment(loggedInAccount, amount, recipientNumber);
+                case 7:
+                    withdraw(accounts, accountCount);
                     break;
-                }
-                case 8: {
-                    // ATM Withdrawal
-                    int accountNumber;
-                    double amount;
-                    string pin;
-                    cout << "Enter account number: ";
-                    cin >> accountNumber;
-                    cout << "Enter amount to withdraw: ";
-                    cin >> amount;
-                    cout << "Enter PIN: ";
-                    cin >> pin;
-                    bank.atmWithdrawal(accountNumber, amount, pin);
+                case 8:
+                    onlinePayment(accounts, accountCount);
                     break;
                 }
                 case 9:
-                    // Exit
-                    loggedInAccount = -1;
-                    cout << "Logged out successfully. Goodbye!\n";
+                    saveAccountsToFile(accounts, accountCount);
+                    cout << "Goodbye!" << endl;
                     break;
                 default:
-                    cout << "Invalid choice.\n";
+                    throw invalid_argument("Invalid choice. Please try again.");
             }
+        } catch (const exception &e) {
+            cout << e.what() << endl;
         }
-    }
-}                 
+    } while (choice != 9);
+
+    return 0;
+}
