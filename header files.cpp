@@ -19,4 +19,4 @@ struct Account {
 struct Recipient {
     int accountNumber;
     string name;
-};
+};     
