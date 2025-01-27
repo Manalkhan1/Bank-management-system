@@ -28,5 +28,5 @@
             accounts.push_back(acc);
         }
         inFile.close();
-    }     
+    }        
 
