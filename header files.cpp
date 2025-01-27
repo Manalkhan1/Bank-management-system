@@ -1,22 +1,22 @@
 #include <iostream>
-#include <vector>
-#include <iomanip>
-#include <string>
 #include <fstream>
+#include <cstring>
+#include <iomanip>
 #include <stdexcept>
 
 using namespace std;
 
-// Structure to represent a bank account
 struct Account {
     int accountNumber;
-    string name;
+    char name[50];
     double balance;
-    string pin;
+    char pin[10];
 };
 
-// Structure to store recipient details
 struct Recipient {
     int accountNumber;
-    string name;
-};     
+    char name[50];
+};
+
+Recipient recipients[100];
+int recipientCount = 0;
